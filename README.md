@@ -26,13 +26,19 @@ cloneしてくる場所はどこでもいいです。どこでもいいと言い
 
 #### ENV = 'STATIC'
 
-最初静的に構築するときはこれで設定してください。これにすると `build/app/dest` の中にファイルが吐き出され、ローカルサーバーもここを見に行きます。`yarn release` でcss/jsともに圧縮したものが吐かれます。  
+最初静的に構築するときはこれで設定してください。これにすると `build/app/dest` の中にファイルが吐き出され、ローカルサーバーもここを見に行きます。`yarn run release` でcss/jsともに圧縮したものが吐かれます。  
 なお、この時は`build/app/src/**/*.html`を監視します。
 
 #### ENV = 'WP'
 
 この場合、`buildSetting.js`で指定したテーマフォルダに吐き出しに行きます。`build/app/src/style.css`や`build/app/src/style-editor.css`、`build/app/src/screenshot.png`も吐き出しに行くので必要があれば変更してください。なお、この場合、htmlは監視せずに、`build/app/src/php/**/*.php`を監視し、テーマフォルダの中に吐き出すので、ここ`single.php`などのファイルを作成していってください。一応たいしたことない雛形も置いています。  
-`yarn release`でcss/jsともに圧縮したものが吐かれます。
+`yarn run release`でcss/jsともに圧縮したものが吐かれます。
+
+### ■ 注意
+
+`ENV`を`WP`にしているとき、`yarn start`あるいは`yarn run release` を叩くたびにテーマフォルダを一回削除して再生成します(`STATIC`の時は`app/dest`フォルダがそうなる)。なので、**このディレクトリをテーマフォルダにおくことは絶対にやめてください。**わけわかんないことなります。  
+同じ理由で、**直接テーマフォルダの中に何かを置くのはやめてください。消えます(`app/dest`の中も)。**
+
 
 ## 推奨プラグイン
 
@@ -72,8 +78,6 @@ cloneしてくる場所はどこでもいいです。どこでもいいと言い
 |[WP-Optimize](https://ja.wordpress.org/plugins/wp-optimize/)|データベースを最適化(古いリビジョンなどいらないものを削除)|
 |[Multi Device Switcher](https://ja.wordpress.org/plugins/multi-device-switcher/)|デバイスによってテーマを切り替える|
 |[No Category Base (WPML)](https://ja.wordpress.org/plugins/no-category-base-wpml/)|ブログのURLから'category'を除去|
-
-
 
 ## 構成
 
