@@ -37,16 +37,14 @@ const directorySettings = path => {
 /**
  * style.cssに記載する author情報
  */
-const styleComment = '/*\n' + `
+const styleComment =
+  '/*\n' +
+  `
 Theme Name: ${themesName}
 Theme URI:
 Author:
 Version: 1.0
-` + '\n*/';
+` +
+  '\n*/';
 
-export {
-  DOMAIN,
-  ENV,
-  directorySettings,
-  styleComment
-};
+export { DOMAIN, ENV, directorySettings, styleComment };

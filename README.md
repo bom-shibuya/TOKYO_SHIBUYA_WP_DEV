@@ -27,7 +27,7 @@ cloneしてくる場所はどこでもいいです。どこでもいいと言い
 #### ENV = 'STATIC'
 
 最初静的に構築するときはこれで設定してください。これにすると `build/app/dest` の中にファイルが吐き出され、ローカルサーバーもここを見に行きます。`yarn run release` でcss/jsともに圧縮したものが吐かれます。  
-なお、この時は`build/app/src/**/*.html`を監視します。
+なお、この時は`build/app/src/html/**/*.html`を監視します。
 
 #### ENV = 'WP'
 
@@ -44,6 +44,7 @@ cloneしてくる場所はどこでもいいです。どこでもいいと言い
 
 |投稿を便利にする系|概要|
 |:--|:--|
+|[WP Multibyte Patch](https://ja.wordpress.org/plugins/wp-multibyte-patch/)|日本語サイトなら必須。localizeで足りない部分も日本語対応してくれる|
 |[Yoast SEO](https://ja.wordpress.org/plugins/wordpress-seo/)|SEO対策|
 |[Advanced Custom Field](https://www.advancedcustomfields.com/)|カスタムフィールドの追加|
 |[Custom Post Type UI](https://ja.wordpress.org/plugins/custom-post-type-ui/)|カスタム投稿 + カスタムタクソノミーの設定|
@@ -62,6 +63,7 @@ cloneしてくる場所はどこでもいいです。どこでもいいと言い
 
 |セキュリティ系|概要|
 |:--|:--|
+|[All In One WP Security](https://ja.wordpress.org/plugins/all-in-one-wp-security-and-firewall/)|セキュリティ管理|
 |[SiteGuard WP Plugin](https://ja.wordpress.org/plugins/siteguard/)|セキュリティ管理|
 |[All-in-One WP Migration](https://ja.wordpress.org/plugins/all-in-one-wp-migration/)|引っ越し用|
 |[BackWPup](https://ja.wordpress.org/plugins/backwpup/)|自動/手動バックアップ|
@@ -77,6 +79,7 @@ cloneしてくる場所はどこでもいいです。どこでもいいと言い
 |[WP Fastest Cache](https://ja.wordpress.org/plugins/wp-fastest-cache/)|キャッシュの設定|
 |[WP-Optimize](https://ja.wordpress.org/plugins/wp-optimize/)|データベースを最適化(古いリビジョンなどいらないものを削除)|
 |[Multi Device Switcher](https://ja.wordpress.org/plugins/multi-device-switcher/)|デバイスによってテーマを切り替える|
+|[Breadcrumb NavXT](https://ja.wordpress.org/plugins/breadcrumb-navxt/)|柔軟にパンくずリストの設定ができる。|
 |[No Category Base (WPML)](https://ja.wordpress.org/plugins/no-category-base-wpml/)|ブログのURLから'category'を除去|
 
 ## 構成

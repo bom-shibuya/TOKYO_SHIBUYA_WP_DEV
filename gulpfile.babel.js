@@ -72,11 +72,13 @@ gulp.task('browserSync', () => {
 
     if (ENV === 'STATIC') {
       return {
-        ...base, server: { baseDir: DIR.OUTPUT }
+        ...base,
+        server: { baseDir: DIR.OUTPUT }
       };
     } else if (ENV === 'WP') {
       return {
-        ...base, proxy: DOMAIN
+        ...base,
+        proxy: DOMAIN
       };
     }
   };
@@ -86,22 +88,26 @@ gulp.task('browserSync', () => {
 
 // sass
 gulp.task('sass', () => {
-  return gulp.src(DIR.SRC_ASSETS + 'sass/**/*.{sass,scss}')
+  return gulp
+    .src(DIR.SRC_ASSETS + 'sass/**/*.{sass,scss}')
     .pipe(sourcemaps.init())
     .pipe(plumber())
     .pipe(sassGlob())
-    .pipe(sass({
-      includePaths: 'node_modules/tokyo-shibuya-reset',
-      outputStyle: ':expanded'
-    })
-    .on('error', sass.logError))
-    .pipe(please({
-      sass: false,
-      minifier: false,
-      rem: false,
-      pseudoElements: false,
-      mqpacker: true
-    }))
+    .pipe(
+      sass({
+        includePaths: 'node_modules/tokyo-shibuya-reset',
+        outputStyle: ':expanded'
+      }).on('error', sass.logError)
+    )
+    .pipe(
+      please({
+        sass: false,
+        minifier: false,
+        rem: false,
+        pseudoElements: false,
+        mqpacker: true
+      })
+    )
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(DIR.OUTPUT_ASSETS + 'css/'))
     .pipe(browserSync.stream());
@@ -109,7 +115,8 @@ gulp.task('sass', () => {
 
 // js
 gulp.task('scripts', () => {
-  return gulp.src(DIR.SRC_ASSETS + 'js/**/*.js')
+  return gulp
+    .src(DIR.SRC_ASSETS + 'js/**/*.js')
     .pipe(plumber())
     .pipe(webpackStream(webpackConfig.dev, webpack))
     .pipe(gulp.dest(DIR.OUTPUT_ASSETS + 'js'))
@@ -118,23 +125,25 @@ gulp.task('scripts', () => {
 
 // imageMin
 gulp.task('imageMin', () => {
-  return gulp.src(DIR.SRC_ASSETS + 'img/**/*')
-    .pipe(imagemin(
-      [
-        imagemin.gifsicle({
-          optimizationLevel: 3,
-          interlaced: true
-        }),
-        imagemin.jpegtran({ progressive: true }),
-        imagemin.optipng({ optimizationLevel: 5 }),
-        imagemin.svgo({ removeViewBox: false })
-      ],
-      { verbose: true }
-    ))
+  return gulp
+    .src(DIR.SRC_ASSETS + 'img/**/*')
+    .pipe(
+      imagemin(
+        [
+          imagemin.gifsicle({
+            optimizationLevel: 3,
+            interlaced: true
+          }),
+          imagemin.jpegtran({ progressive: true }),
+          imagemin.optipng({ optimizationLevel: 5 }),
+          imagemin.svgo({ removeViewBox: false })
+        ],
+        { verbose: true }
+      )
+    )
     .pipe(gulp.dest(DIR.OUTPUT_ASSETS + 'img/'))
     .pipe(browserSync.stream());
 });
-
 
 /**
  * only 'STATIC' task
@@ -142,12 +151,15 @@ gulp.task('imageMin', () => {
 
 // html include
 gulp.task('fileinclude', () => {
-  return gulp.src([DIR.SRC + '**/*.html', '!' + DIR.SRC + '_inc/**/*.html'])
+  return gulp
+    .src([DIR.SRC + 'html/**/*.html', '!' + DIR.SRC + 'html/_inc/**/*.html'])
     .pipe(plumber())
-    .pipe(fileinclude({
-      prefix: '@@',
-      basepath: 'app/src/_inc'
-    }))
+    .pipe(
+      fileinclude({
+        prefix: '@@',
+        basepath: 'app/src/html/_inc'
+      })
+    )
     .pipe(gulp.dest(DIR.DEST))
     .pipe(browserSync.stream());
 });
@@ -158,37 +170,38 @@ gulp.task('fileinclude', () => {
 
 // php copy
 gulp.task('phpCopy', () => {
-  return gulp.src(DIR.SRC + 'php/**/*.php')
+  return gulp
+    .src(DIR.SRC + 'php/**/*.php')
     .pipe(gulp.dest(DIR.THEMES))
     .pipe(browserSync.stream());
 });
 
 // css for themes
 gulp.task('cssThemes', () => {
-  return gulp.src(DIR.SRC + 'style.css')
+  return gulp
+    .src(DIR.SRC + 'style.css')
     .pipe(insert.prepend(styleComment))
     .pipe(gulp.dest(DIR.THEMES));
 });
 
 // css for editor
 gulp.task('cssEditor', () => {
-  return gulp.src(DIR.SRC + 'style-editor.css')
+  return gulp
+    .src(DIR.SRC + 'editor-style.css')
     .pipe(insert.prepend('@import url("./assets/css/main.css");'))
     .pipe(gulp.dest(DIR.THEMES));
 });
 
 // screenshot copy for themes
 gulp.task('screenshot', () => {
-  return gulp.src(DIR.SRC + 'screenshot.png')
-    .pipe(gulp.dest(DIR.THEMES));
+  return gulp.src(DIR.SRC + 'screenshot.png').pipe(gulp.dest(DIR.THEMES));
 });
-
 
 /**
  * WATCH && BUILD TASK
  */
 
-const viewWatchDir = ENV === 'STATIC' ? '**/*.html' : 'php/**/*.php';
+const viewWatchDir = ENV === 'STATIC' ? 'html/**/*.html' : 'php/**/*.php';
 const viewWatchTask = ENV === 'STATIC' ? 'fileinclude' : 'phpCopy';
 
 // watch
@@ -198,69 +211,79 @@ gulp.task('watch', () => {
   gulp.watch(DIR.SRC_ASSETS + 'js/**/*.js', ['scripts']);
 });
 
-
-const initTasks = ENV === 'STATIC' ?
-  ['fileinclude', 'scripts', 'sass', 'imageMin'] :
-  ['phpCopy', 'cssThemes', 'cssEditor', 'screenshot', 'scripts', 'sass', 'imageMin'];
+const initTasks =
+  ENV === 'STATIC'
+    ? ['fileinclude', 'scripts', 'sass', 'imageMin']
+    : [
+        'phpCopy',
+        'cssThemes',
+        'cssEditor',
+        'screenshot',
+        'scripts',
+        'sass',
+        'imageMin'
+      ];
 
 // only build
 gulp.task('build', () => {
   cleanDIR = DIR.OUTPUT;
-  runSequence(
-    'clean',
-    initTasks,
-  );
+  runSequence('clean', initTasks);
 });
-
 
 // default
 gulp.task('default', () => {
   cleanDIR = DIR.OUTPUT;
-  runSequence(
-    'clean',
-    initTasks,
-    'browserSync',
-    'watch'
-  );
+  runSequence('clean', initTasks, 'browserSync', 'watch');
 });
-
 
 // *********** RELEASE TASK ***********
 
 // css
 gulp.task('release_CSS', () => {
-  return gulp.src(DIR.SRC_ASSETS + 'sass/**/*.{sass,scss}')
+  return gulp
+    .src(DIR.SRC_ASSETS + 'sass/**/*.{sass,scss}')
     .pipe(sassGlob())
-    .pipe(sass({
-      includePaths: 'node_modules/tokyo-shibuya-reset',
-      outputStyle: ':expanded'
-    }))
-    .pipe(please({
-      sass: false,
-      minifier: true,
-      rem: false,
-      pseudoElements: false,
-      mqpacker: true
-    }))
+    .pipe(
+      sass({
+        includePaths: 'node_modules/tokyo-shibuya-reset',
+        outputStyle: ':expanded'
+      })
+    )
+    .pipe(
+      please({
+        sass: false,
+        minifier: true,
+        rem: false,
+        pseudoElements: false,
+        mqpacker: true
+      })
+    )
     .pipe(insert.prepend('\n/*! compiled at:' + fmtdDate + ' */\n'))
     .pipe(gulp.dest(DIR.OUTPUT_ASSETS + 'css/'));
 });
 
 // js conat
 gulp.task('release_JS', () => {
-  return webpackStream(webpackConfig.prod, webpack)
-  .pipe(gulp.dest(DIR.OUTPUT_ASSETS + 'js'));
+  return webpackStream(webpackConfig.prod, webpack).pipe(
+    gulp.dest(DIR.OUTPUT_ASSETS + 'js')
+  );
 });
 
-const releaseTasks = ENV === 'STATIC' ?
-  ['fileinclude', 'release_JS', 'release_CSS', 'imageMin'] :
-  ['phpCopy', 'cssThemes', 'cssEditor', 'screenshot', 'release_JS', 'release_CSS', 'imageMin'];
+const releaseTasks =
+  ENV === 'STATIC'
+    ? ['fileinclude', 'release_JS', 'release_CSS', 'imageMin']
+    : [
+        'phpCopy',
+        'cssThemes',
+        'cssEditor',
+        'screenshot',
+        'release_JS',
+        'release_CSS',
+        'imageMin'
+      ];
 
 // for release
-gulp.task('release', () =>{
+gulp.task('release', () => {
   cleanDIR = DIR.OUTPUT_ASSETS;
-  runSequence(
-    'clean',
-    releaseTasks
-  );
+  runSequence('clean', releaseTasks);
 });
