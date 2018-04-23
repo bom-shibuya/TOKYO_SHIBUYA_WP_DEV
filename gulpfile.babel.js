@@ -142,11 +142,11 @@ gulp.task('imageMin', () => {
 
 // html include
 gulp.task('fileinclude', () => {
-  return gulp.src([DIR.SRC + '**/*.html', '!' + DIR.SRC + '_inc/**/*.html'])
+  return gulp.src([DIR.SRC + 'html/**/*.html', '!' + DIR.SRC + 'html/_inc/**/*.html'])
     .pipe(plumber())
     .pipe(fileinclude({
       prefix: '@@',
-      basepath: 'app/src/_inc'
+      basepath: 'app/src/html/_inc'
     }))
     .pipe(gulp.dest(DIR.DEST))
     .pipe(browserSync.stream());
@@ -188,7 +188,7 @@ gulp.task('screenshot', () => {
  * WATCH && BUILD TASK
  */
 
-const viewWatchDir = ENV === 'STATIC' ? '**/*.html' : 'php/**/*.php';
+const viewWatchDir = ENV === 'STATIC' ? 'html/**/*.html' : 'php/**/*.php';
 const viewWatchTask = ENV === 'STATIC' ? 'fileinclude' : 'phpCopy';
 
 // watch
